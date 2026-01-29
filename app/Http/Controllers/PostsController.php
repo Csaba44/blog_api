@@ -41,7 +41,7 @@ class PostsController extends Controller
 
         $post = [$post, $post->categories];
 
-        return response()->json($post[0]);
+        return response()->json($post[0], 201);
     }
 
     /**
