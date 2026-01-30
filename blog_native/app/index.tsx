@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { Post } from "@/types/post";
 import axios from "axios";
 import BlogPost from "@/components/BlogPost";
 import styles from "@/style/style";
+import { useFocusEffect } from "expo-router";
 
 
 
@@ -25,9 +26,13 @@ export default function Index() {
 
   };
 
-  useEffect(() => {
-    getPosts();
-  }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      getPosts();
+
+    }, []),
+  );
 
 
   return (
