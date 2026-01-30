@@ -42,7 +42,28 @@ export default function Post() {
   );
 
   const createPost = async () => {
-    console.log(formData);
+    const isTitleValid = formData.title.trim() !== "";
+    const isContentValid = formData.content.trim() !== "";
+    const isCategoryValid = formData.categories.length > 0;
+
+    if (!isTitleValid) {
+      return alert("The title is invalid.");
+    } else if (!isContentValid) {
+      return alert("The content is invalid.")
+    } else if (!isCategoryValid) {
+      return alert("You need to select at least one category.")
+    }
+
+    try {
+      const res = await axios.post("http://localhost:8000/api/posts", formData);
+
+      console.log(res.data);
+
+      if (res.status === 201) alert("Post created.");
+    } catch (error) {
+      alert(error);
+      console.log(error);
+    }
   };
 
   const onCategoryPress = (category: Category): void => {
@@ -66,7 +87,7 @@ export default function Post() {
 
 
   return <>
-    <View style={{ ...styles.container, flex: 1, alignItems: "center", justifyContent: "center" }}>
+    {categories.length > 0 ? <View style={{ ...styles.container, flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ ...styles.h1, margin: 15 }}>New Post</Text>
 
       <View>
@@ -88,7 +109,7 @@ export default function Post() {
 
         <TouchableOpacity onPress={createPost} style={{ ...styles.button, marginTop: 15 }}><Text style={{ textAlign: "center", color: "white" }}>Create</Text></TouchableOpacity>
       </View>
-    </View >
+    </View > : <Text>Loading...</Text>}
 
   </>
 }
