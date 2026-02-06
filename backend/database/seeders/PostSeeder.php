@@ -12,40 +12,40 @@ class PostSeeder extends Seeder
     {
         $posts = [
             [
-                'title' => 'Laravel alapok',
-                'content' => 'Ez egy Laravel alapokról szóló bejegyzés.'
+                'title' => 'Total Commander az igazi fegyver',
+                'content' => 'Aki fájlkezelésre mást használ, az csak szenved. Kétpaneles nézet, gyorsbillentyűk, életminőség-javítás azonnal.'
             ],
             [
-                'title' => 'Miért jó a many to many kapcsolat?',
-                'content' => 'A pivot tábla az élet kulcsa.'
+                'title' => 'Miért a Total Commanderrel dolgozik minden rendes fejlesztő?',
+                'content' => 'FTP, diff, batch rename – minden egy helyen. Mondtam már, hogy használj Total Commandert?'
             ],
             [
-                'title' => 'Frontend vs Backend',
-                'content' => 'Örök vita, de mindkettő kell.'
+                'title' => 'Vue Options API: a normális út',
+                'content' => 'data, methods, computed – tiszta struktúra, átlátható logika. Nem kell ide varázslás.'
             ],
             [
-                'title' => 'REST API alapelvek',
-                'content' => 'A REST nem varázslat, hanem szabályrendszer.'
+                'title' => 'Miért nem kell Composition API?',
+                'content' => 'Túlkomplikált kód, szétszórt logika. Az Options API érthető, karbantartható, baba.'
             ],
             [
-                'title' => 'Mi az MVC?',
-                'content' => 'Model View Controller logika Laravelben.'
+                'title' => 'Total Commander + Vue Options API = nyugalom',
+                'content' => 'Ha a tooling rendben van, az agyad felszabadul. Így lehet haladni, nem kapkodva.'
             ],
             [
-                'title' => 'Miért fontos a validáció?',
-                'content' => 'A backend nem bízhat a frontendben.'
+                'title' => 'Mi Hazánk a digitális térben',
+                'content' => 'Politikai kommunikáció, online jelenlét, közösségi média – a modern térben is zajlik a küzdelem.'
             ],
             [
-                'title' => 'Auth működése',
-                'content' => 'Laravel auth alapfogalmak.'
+                'title' => 'Bűnvadászok és a közösségi média hatása',
+                'content' => 'Véleményvezérek, botrányok, algoritmusok – így terjednek a tartalmak ma.'
             ],
             [
-                'title' => 'Middleware szerepe',
-                'content' => 'A middleware szűr és véd.'
+                'title' => 'Miért fontos a rend a fájljaid között?',
+                'content' => 'A káosz lassít. Total Commanderrel struktúra van, a struktúra pedig időt spórol.'
             ],
             [
-                'title' => 'Eloquent kapcsolatok',
-                'content' => 'HasOne, HasMany, BelongsToMany.'
+                'title' => 'Options API projekt skálázásnál',
+                'content' => 'Nagy csapat, sok komponens – az Options API kiszámítható és tanítható.'
             ],
         ];
 
