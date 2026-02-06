@@ -1,8 +1,8 @@
 import styles from "@/style/style";
 import { Category } from "@/types/post";
 import axios from "axios";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Post() {
@@ -19,6 +19,8 @@ export default function Post() {
     categories: []
   });
 
+  const [categories, setCategories] = useState<Category[]>([]);
+
   const getCategories = async () => {
     try {
       const res = await axios.get("http://localhost:8000/api/categories");
@@ -32,12 +34,9 @@ export default function Post() {
     }
   };
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
   useFocusEffect(
     useCallback(() => {
       getCategories();
-
     }, []),
   );
 
@@ -49,17 +48,17 @@ export default function Post() {
     if (!isTitleValid) {
       return alert("The title is invalid.");
     } else if (!isContentValid) {
-      return alert("The content is invalid.")
+      return alert("The content is invalid.");
     } else if (!isCategoryValid) {
-      return alert("You need to select at least one category.")
+      return alert("You need to select at least one category.");
     }
 
     try {
       const res = await axios.post("http://localhost:8000/api/posts", formData);
 
-      console.log(res.data);
-
       if (res.status === 201) alert("Post created.");
+
+      router.push("/");
     } catch (error) {
       alert(error);
       console.log(error);
@@ -67,49 +66,92 @@ export default function Post() {
   };
 
   const onCategoryPress = (category: Category): void => {
-    const isInArr = formData.categories.filter((c: number) => c === category.id).length !== 0;
+    const isInArr = formData.categories.includes(category.id);
 
     if (!isInArr) {
-      setFormData((prev) => {
-        const cats = [...prev.categories, category.id];
-
-        return { ...prev, categories: cats };
-      })
+      setFormData(prev => ({
+        ...prev,
+        categories: [...prev.categories, category.id]
+      }));
     } else {
-      setFormData((prev) => {
-        const cats = prev.categories.filter((c: number) => c !== category.id);
-
-        return { ...prev, categories: cats };
-      })
+      setFormData(prev => ({
+        ...prev,
+        categories: prev.categories.filter(c => c !== category.id)
+      }));
     }
-
   };
 
+  return (
+    <>
+      {categories.length > 0 ? (
+        <View style={{ ...styles.container, flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <Text style={{ ...styles.h1, margin: 15 }}>New Post</Text>
 
-  return <>
-    {categories.length > 0 ? <View style={{ ...styles.container, flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ ...styles.h1, margin: 15 }}>New Post</Text>
+          <View>
+            <TextInput
+              placeholder="Title"
+              style={styles.input}
+              value={formData.title}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, title: text }))
+              }
+            />
 
-      <View>
-        <TextInput placeholder="Title" style={styles.input} value={formData.title} onChangeText={(text) => setFormData((prev) => ({ ...prev, title: text }))}></TextInput>
-        <TextInput placeholder="Content" multiline={true} numberOfLines={5} style={{ ...styles.textbox, marginTop: 15 }} value={formData.content} onChangeText={(text) => setFormData((prev) => ({ ...prev, content: text }))}></TextInput>
+            <TextInput
+              placeholder="Content"
+              multiline
+              numberOfLines={5}
+              style={{ ...styles.textbox, marginTop: 15 }}
+              value={formData.content}
+              onChangeText={(text) =>
+                setFormData((prev) => ({ ...prev, content: text }))
+              }
+            />
 
-        <Text style={{
-          maxWidth: 300, marginTop: 15,
-          flex: 4,
-          marginHorizontal: "auto",
-          width: 300,
-        }}>
-          {
-            categories.map((category) => <>
-              <TouchableOpacity onPress={() => onCategoryPress(category)} key={category.id} style={{ ...styles.button, maxWidth: 100, borderRadius: 5, backgroundColor: formData.categories.includes(category.id) ? "#688d1b" : "gray" }}><Text style={{ textAlign: "center", color: "white" }}>{category.name}</Text></TouchableOpacity >
-            </>)
-          }
-        </Text>
+            <View
+              style={{
+                width: 300,
+                marginTop: 15,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: 10,
+                justifyContent: "center",
+              }}
+            >
+              {categories.map((category) => (
+                <TouchableOpacity
+                  key={category.id}
+                  onPress={() => onCategoryPress(category)}
+                  style={{
+                    width: 90,
+                    paddingVertical: 8,
+                    borderRadius: 5,
+                    alignItems: "center",
+                    backgroundColor: formData.categories.includes(category.id)
+                      ? "#688d1b"
+                      : "gray",
+                  }}
+                >
+                  <Text style={{ color: "white", textAlign: "center" }}>
+                    {category.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
 
-        <TouchableOpacity onPress={createPost} style={{ ...styles.button, marginTop: 15 }}><Text style={{ textAlign: "center", color: "white" }}>Create</Text></TouchableOpacity>
-      </View>
-    </View > : <Text>Loading...</Text>}
-
-  </>
+            <TouchableOpacity
+              onPress={createPost}
+              style={{ ...styles.button, marginTop: 15 }}
+            >
+              <Text style={{ textAlign: "center", color: "white" }}>
+                Create
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : (
+        <Text>Loading...</Text>
+      )}
+    </>
+  );
 }
